@@ -26,8 +26,6 @@
 
 
 
-    "SS22_ELITE_EVENT_PROGRESS": "Elite Energy Buildup: {0}",
-
     "SS2_EQUIP_AFFIXSUPERFIRE_NAME": "Royal Flame",
     "SS2_EQUIP_AFFIXSUPERFIRE_SUBTITLE": "Harbinger of Fire",
 
@@ -55,8 +53,8 @@
     "SS2_ITEM_SHARDEARTH_NAME": "Shards of The Planet",
     "SS2_ITEM_SHARDEARTH_PICKUP": "A collection of shards made of Petrichor V's inner core. Does nothing, but <style=cIsUtility>can be used as a currency</style> elsewhere.",
     "SS2_ITEM_SHARDEARTH_DESC": "A collection of shards made of Petrichor V's inner core. Does nothing, but <style=cIsUtility>can be used as a currency</style> elsewhere.",
-    "SS22_ITEM_SHARDEARTH_PICKUP_NEWEFFECT": "Add <style=cIsHealing>1</style> <style=cStack>(+1 per stack)</style> to base regeneration and increase it by <style=cIsHealing>20%</style> <style=cStack>(+5% per stack)</style> for yourself and every ally in a <style=cIsUtility>30m</style> radius. <style=cIsUtility>Usable as a currency</style> elsewhere.",
-    "SS22_ITEM_SHARDEARTH_DESC_NEWEFFECT": "Chance to re-apply any burn debuff applied by you. Can also be used as a currency elsewhere.",
+    "SS22_ITEM_SHARDEARTH_PICKUP_NEWEFFECT": "Every ally in a <style=cIsUtility>30m</style> radius gains <style=cIsHealing>1</style> <style=cStack>(+1 per stack)</style> base regeneration. Increase your own + your ally's regeneration by <style=cIsHealing>20%</style> <style=cStack>(+5% per stack)</style>. <style=cIsUtility>Usable as a currency</style> elsewhere..",
+    "SS22_ITEM_SHARDEARTH_DESC_NEWEFFECT": "Every ally around you gains regen. Increase their AND your regen further for every ally nearby. Can also be used as a currency elsewhere.",
     "SS2_ITEM_SHARDEARTH_LORE": "???",
 
     "SS2_ITEM_SHARDFIRE_NAME": "Shards of Fire",
@@ -108,11 +106,18 @@
     "SS2_EQUIP_SEISMIC OSCILLATOR_PICKUP": "Deal damage to nearly all grounded enemies.",
     "SS2_EQUIP_SEISMIC OSCILLATOR_DESC": "For 6 seconds, constantly deal <style=cIsDamage>120% base damage</style> to nearly ALL grounded enemies in the map.",
 
-    "SS22_ITEM_ERRATICGADGET_EDIT1_PICKUP": "Your non-void lightning damage is doubled. Chance to fire chain lightning on hit.",
-    "SS22_ITEM_ERRATICGADGET_EDIT1_DESC": "Your <style=cIsDamage>lightning damage</style> is multiplied by <style=cIsDamage>2x</style>. <style=cIsVoid>Void lightning</style> is <style=cDeath>not affected</style>. <style=cIsDamage>10%</style> chance on hit to fire <style=cIsDamage>chain lightning</style> for <style=cIsDamage>300%</style> TOTAL damage on up to <style=cIsDamage>1</style> <style=cStack>(+1 per stack)</style> targets.",
 
-    "SS22_ITEM_ERRATICGADGET_EDIT2_PICKUP": "Gain a huge increase to your lightning damage.",
-    "SS22_ITEM_ERRATICGADGET_EDIT2_DESC": "Your <style=cIsDamage>lightning damage</style> is multiplied by <style=cIsDamage>3x</style> <style=cStack>(+1.5x per stack)</style>. <style=cIsVoid>Void lightning</style> is <style=cDeath>not affected</style>.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE1_PICKUP": "Your non-void lightning damage is doubled. Chance to fire chain lightning on hit.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE1_DESC": "Your <style=cIsDamage>lightning damage</style> is multiplied by <style=cIsDamage>2x</style>. <style=cIsVoid>Void lightning</style> is <style=cDeath>not affected</style>. <style=cIsDamage>10%</style> chance on hit to fire <style=cIsDamage>chain lightning</style> for <style=cIsDamage>300%</style> TOTAL damage on up to <style=cIsDamage>1</style> <style=cStack>(+1 per stack)</style> targets.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE1_VOID_ALLOWED_PICKUP": "Your lightning damage is doubled. Chance to fire chain lightning on hit.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE1_VOID_ALLOWED_DESC": "Your <style=cIsDamage>lightning damage</style> is multiplied by <style=cIsDamage>2x</style>. <style=cIsDamage>10%</style> chance on hit to fire <style=cIsDamage>chain lightning</style> for <style=cIsDamage>300%</style> TOTAL damage on up to <style=cIsDamage>1</style> <style=cStack>(+1 per stack)</style> targets.",
+
+
+    "SS22_ITEM_ERRATICGADGET_CHANGE2_PICKUP": "Gain a huge increase to your non-void lightning damage.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE2_DESC": "Your <style=cIsDamage>lightning damage</style> is multiplied by <style=cIsDamage>3x</style> <style=cStack>(+1.5x per stack)</style>. <style=cIsVoid>Void lightning</style> is <style=cDeath>not affected</style>.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE2_VOID_ALLOWED_PICKUP": "Gain a huge increase to your lightning damage.",
+    "SS22_ITEM_ERRATICGADGET_CHANGE2_VOID_ALLOWED_DESC": "Your <style=cIsDamage>lightning damage</style> is multiplied by <style=cIsDamage>3x</style> <style=cStack>(+1.5x per stack)</style>.",
+
 
     "SS22_ITEM_PORTABLEREACTOR_EDIT_PICKUP": "Gain a large amount of armor and speed for some time after entering a stage.",
     "SS22_ITEM_PORTABLEREACTOR_EDIT_DESC": "Gain <style=cIsUtility>100 armor</style> and <style=cIsUtility>+100% movement speed</style> for the first <style=cIsUtility>80s</style> <style=cStack>(+40s per stack)</style> of a stage.",

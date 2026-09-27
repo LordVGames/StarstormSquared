@@ -10,7 +10,7 @@ namespace StarstormSquared.Changes.Survivors.DUT;
 
 internal static class GiveSkillIcons
 {
-    //[SystemInitializer(dependencies: typeof(SurvivorCatalog))]
+    [SystemInitializer(dependencies: typeof(BodyCatalog))]
     internal static void GiveDUTSkillIcons()
     {
         if (!SS2Config.enableBeta.value)
@@ -19,14 +19,17 @@ internal static class GiveSkillIcons
         }
 
 
-        SurvivorDef dutSurvivor = SurvivorCatalog.FindSurvivorDef("survivorDUT");
-        if (dutSurvivor == null || dutSurvivor.bodyPrefab == null || !dutSurvivor.bodyPrefab.TryGetComponent<CharacterBody>(out CharacterBody dutCharacterBody) || dutCharacterBody == null)
+        GameObject dutGameObject = BodyCatalog.FindBodyPrefab("DUTBody");
+        if (dutGameObject == null || !dutGameObject.TryGetComponent<CharacterBody>(out var dutBody))
         {
-            Log.Warning("DUT SURVIVOR COULD NOT BE FOUND TO GIVE SKILL ICONS TO");
+            Log.Warning("DU-T could not be found to give new skill icons to!");
             return;
         }
-        var dutSkillLocator = dutSurvivor.bodyPrefab.GetComponent<SkillLocator>();
-
+        if (!dutBody.TryGetComponent<SkillLocator>(out var dutSkillLocator))
+        {
+            Log.Warning("DU-T didn't have a skill locator???");
+            return;
+        }
 
 
         dutSkillLocator.primary.skillFamily.defaultSkillDef.icon = LoadedAssets.RailgunnerShotIcon;

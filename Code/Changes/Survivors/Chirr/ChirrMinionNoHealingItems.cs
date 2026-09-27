@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MiscFixes.Modules;
 using Mono.Cecil.Cil;
 using MonoDetour;
 using MonoDetour.Cil;
@@ -29,15 +30,17 @@ internal static class ChirrMinionNoHealingItems
     {
         ILWeaver w = new(info);
         ILLabel endIfFalse = w.DefineLabel();
+        Instruction loadItemDefInstruction = null!;
+
 
         w.MatchRelaxed(
-            x => x.MatchLdloc(0) && w.SetCurrentTo(x),
+            x => x.MatchAny(out loadItemDefInstruction) && w.SetCurrentTo(x),
             x => x.MatchLdcI4(20),
             x => x.MatchCallvirt<ItemDef>("DoesNotContainTag"),
             x => x.MatchBrfalse(out endIfFalse)
         ).ThrowIfFailure()
         .InsertBeforeCurrent(
-            w.Create(OpCodes.Ldloc_0),
+            loadItemDefInstruction,
             w.Create(OpCodes.Ldc_I4_2), // itemtag 2 is healing
             w.Create(OpCodes.Callvirt, typeof(ItemDef).GetMethod("DoesNotContainTag")),
             w.Create(OpCodes.Brfalse, endIfFalse)

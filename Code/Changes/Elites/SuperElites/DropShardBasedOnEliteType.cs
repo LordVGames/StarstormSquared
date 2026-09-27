@@ -3,6 +3,7 @@ using MonoDetour;
 using MonoDetour.Cil;
 using MonoDetour.HookGen;
 using MonoMod.Cil;
+using RoR2;
 using SS2;
 using System;
 using System.Collections.Generic;
@@ -18,16 +19,16 @@ internal static class DropShardBasedOnEliteType
     private static void Setup()
     {
         Mdh.SS2.EliteEventMissionController.OnBossKilledServer.OnKilledServer.ILHook(SkipOverShardDrop);
-        //Mdh.SS2.EliteEventMissionController.Awake.Postfix(ShowBossDrop);
+        Mdh.SS2.EliteEventMissionController.Awake.Postfix(ShowBossDrop);
     }
 
-    /*private static void ShowBossDrop(EliteEventMissionController self)
+    private static void ShowBossDrop(EliteEventMissionController self)
     {
-        Log.Warning($"self.bossDrop is {self.bossDrop == null}");
-        Log.Warning($"self.bossEliteEquipmentis {self.bossEliteEquipment == null}");
-        Log.Warning($"self.bossDrop is {self.bossDrop.name}");
-        Log.Warning($"self.bossEliteEquipmentis {self.bossEliteEquipment.name}");
-    }*/
+        Log.Debug($"self.bossDrop is {self.bossDrop == null}");
+        Log.Debug($"self.bossEliteEquipmentis {self.bossEliteEquipment == null}");
+        Log.Debug($"self.bossDrop is {self.bossDrop.name}");
+        Log.Debug($"self.bossEliteEquipmentis {self.bossEliteEquipment.name}");
+    }
 
     private static void SkipOverShardDrop(ILManipulationInfo info)
     {
@@ -38,9 +39,9 @@ internal static class DropShardBasedOnEliteType
 
         w.MatchRelaxed(
             x => x.MatchLdsfld("SS2.SS2Content/Items", "ShardStorm") && w.SetInstructionTo(ref startOfSkip, x) && w.SetCurrentTo(x),
-            x => x.MatchCallvirt(out _),
-            x => x.MatchCall(out _),
-            x => x.MatchStloc(3) && w.SetInstructionTo(ref endOfSkip, x)
+            x => x.MatchCallOrCallvirt<ItemDef>("get_itemIndex"),
+            x => x.MatchCallOrCallvirt("RoR2.PickupCatalog", "FindPickupIndex"),
+            x => x.MatchStloc(out _) && w.SetInstructionTo(ref endOfSkip, x)
         ).ThrowIfFailure()
         .InsertBranchOver(startOfSkip, endOfSkip);
     }

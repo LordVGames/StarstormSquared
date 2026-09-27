@@ -1,13 +1,17 @@
 using BepInEx;
 using MonoDetour;
 using RoR2;
+using StarstormSquared.ModSupport;
 [assembly: HG.Reflection.SearchableAttribute.OptIn]
 namespace StarstormSquared;
 
 
-[BepInDependency(SS2.SS2Main.GUID, BepInDependency.DependencyFlags.HardDependency)]
+// making these next 2 soft dependencies since i can't hard depend on either and be fine with one being missing
+[BepInDependency(NewAndOlderSS2.PreviousSS2GUID, BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(NewAndOlderSS2.NewSS2GUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(R2API.LanguageAPI.PluginGUID, BepInDependency.DependencyFlags.HardDependency)]
-[BepInDependency(LordsItemEdits.Plugin.Id, BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(ReheatedItems.Plugin.Id, BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(RiskOfOptions.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInAutoPlugin]
 public partial class Plugin : BaseUnityPlugin
 {
@@ -15,13 +19,10 @@ public partial class Plugin : BaseUnityPlugin
     public void Awake()
     {
         PluginInfo = Info;
-        Log.Init(Logger);
         ConfigOptions.BindAllConfigOptions(Config);
-        MyAssets.Init();
+        Log.Init(Logger);
         LoadedAssets.LoadAssets();
-        MonoDetourManager.InvokeHookInitializers(typeof(Plugin).Assembly);
-        RoR2Application.onLoad += Changes.Survivors.SurvivorIcons.ChangeSurvivorIcons;
-        RoR2Application.onLoad += Changes.Survivors.DUT.GiveSkillIcons.GiveDUTSkillIcons;
-        RoR2Application.onLoad += Changes.Survivors.DUT.MakeDriftBuffNotHidden.EditDriftBuff;
+        MonoDetourManager.InvokeHookInitializers(typeof(Plugin).Assembly, reportUnloadableTypes: false);
+        ModAssets.Init();
     }
 }

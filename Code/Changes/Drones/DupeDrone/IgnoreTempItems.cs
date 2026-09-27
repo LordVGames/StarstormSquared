@@ -8,7 +8,7 @@ using System.Text;
 namespace StarstormSquared.Changes.Drones.DupeDrone;
 
 
-[MonoDetourTargets(typeof(EntityStates.CloneDrone.CloneDroneSearch), GenerateControlFlowVariants = true)]
+[MonoDetourTargets(typeof(CloneDroneSearch), GenerateControlFlowVariants = true)]
 internal static class IgnoreTempItems
 {
     [MonoDetourHookInitialize]

@@ -1,15 +1,21 @@
 using BepInEx.Configuration;
 using MiscFixes.Modules;
+using StarstormSquared.Changes.Survivors.Chirr;
+using StarstormSquared.ModSupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using UnityEngine.SceneManagement;
+using static StarstormSquared.ConfigOptions.ItemChanges.ErraticGadgetItem;
 namespace StarstormSquared;
 
 
 public static class ConfigOptions
 {
+    public static ConfigEntry<bool> DebugLogging;
+
+
     public static class Chirr
     {
         private const string _categoryName = "Chirr";
@@ -221,6 +227,11 @@ public static class ConfigOptions
         public static ConfigEntry<bool> AddCraftingChefToZanzanStage;
         public static ConfigEntry<bool> SpawnSaplingInSpecialSpots;
         public static ConfigEntry<bool> StopZanzanIdleSounds;
+        public static ConfigEntry<bool> AddAmbientCapLevels;
+        public static ConfigEntry<float> BonusLevelsToAdd;
+        public static ConfigEntry<bool> MultiplyByEtherealsCompleted;
+        public static ConfigEntry<bool> AddLevelsOnFirstEthereal;
+        public static ConfigEntry<bool> SquareEtherealsCompleted;
 
         internal static void BindConfigOptions(ConfigFile config)
         {
@@ -242,6 +253,38 @@ public static class ConfigOptions
                 "If their idle scav sounds are getting a lil annoying (no offense to them) then enable this to stop the sounds. Changes only take affect on stage load!",
                 true
             );
+            AddAmbientCapLevels = config.BindOption(
+                _categoryName,
+                "Add levels to ambient level cap",
+                "Should 100 levels be added to the ambient level cap each ethereal level?",
+                true
+            );
+            BonusLevelsToAdd = config.BindOptionSteppedSlider(
+                _categoryName,
+                "Bonus levels to add",
+                "You can configure the amount of bonus levels (separate from the ambient level cap) to add to enemies each ethereal level. This is shown by the green +X number by the ambient level cap.",
+                30,
+                1,
+                0, 999
+            );
+            MultiplyByEtherealsCompleted = config.BindOption(
+                _categoryName,
+                "Multiply bonus levels per ethereal",
+                "If their idle scav sounds are getting a lil annoying (no offense to them) then enable this to stop the sounds. Changes only take affect on stage load!",
+                true
+            );
+            AddLevelsOnFirstEthereal = config.BindOption(
+                _categoryName,
+                "Add bonus levels on the first ethereal level",
+                "SS2 doesn't add any bonus levels on the first ethereal level (ambient level cap is increased on the first ethereal however). Enable this if you want that to happen",
+                false
+            );
+            SquareEtherealsCompleted = config.BindOption(
+                _categoryName,
+                "Put completed ethereals count to the power of 2?",
+                "Or in other words, if the ethereals completed count should be SQUARED!!!!!!",
+                true
+            );
         }
     }
 
@@ -251,7 +294,7 @@ public static class ConfigOptions
         private const string _categoryName = "Restore Shard Drops";
         public static ConfigEntry<bool> RestoreGoldShardDrop;
         public static ConfigEntry<bool> RestoreVoidShardDrop;
-        //public static ConfigEntry<bool> RestoreStormShardDrops;
+        public static ConfigEntry<bool> RestoreStormShardDrops;
 
         internal static void BindConfigOptions(ConfigFile config)
         {
@@ -270,13 +313,13 @@ public static class ConfigOptions
                 true,
                 Extensions.ConfigFlags.RestartRequired
             );
-            /*RestoreStormShardDrops = config.BindOption(
+            RestoreStormShardDrops = config.BindOption(
                 _categoryName,
                 "Restore storm shard drops",
                 "Storm shards drop when the boss from a stormborn teleporter is beaten.",
                 true,
                 Extensions.ConfigFlags.RestartRequired
-            );*/
+            );
         }
     }
 
@@ -285,40 +328,62 @@ public static class ConfigOptions
     {
         private const string _categoryName = "Item Changes";
 
-        public static ConfigEntry<bool> ArmedBackpack;
 
-        public enum ErraticGadgetEditType
+        public static class ErraticGadgetItem
         {
-            None = 0,
-            DamageMultAndOnHitProc,
-            OnlyDamageMult
-        }
-        public static ConfigEntry<ErraticGadgetEditType> ErraticGadget;
+            private const string _categoryName = "Item Changes - Erratic Gadget";
+            public enum ErraticGadgetChangeType
+            {
+                None = 0,
+                DamageMultAndOnHitProc,
+                OnlyDamageMult
+            }
+            public static ConfigEntry<ErraticGadgetChangeType> Change;
+            public static ConfigEntry<bool> AllowVoidLightning;
 
-        public static ConfigEntry<bool> PortableReactor;
+
+            internal static void BindConfigOptions(ConfigFile config)
+            {
+                Change = config.BindOption(
+                    _categoryName,
+                    "Item Change",
+                    "2 Different changes:\n\nDamageMultAndOnHitProc: Doubled lightning damage and chance to do chain lightning on hit. Stacks increase chance and targets hit.\n\nOnlyDamageMult: 3x lightning damage, stacks add to the damage multiplier.\n\nAnd of course a None option for if you don't want either.",
+                    ErraticGadgetChangeType.DamageMultAndOnHitProc,
+                    Extensions.ConfigFlags.RestartRequired
+                );
+                AllowVoidLightning = config.BindOption(
+                    _categoryName,
+                    "Allow void lightning to be affected",
+                    "SS2 normally doesn't allow void lightning (aka polylute) to be affected by erratic gadget's doubling. If you want it to be affected, use this.",
+                    false,
+                    Extensions.ConfigFlags.RestartRequired
+                );
+            }
+        }
+
+
+        public static class PortableReactor
+        {
+            public static ConfigEntry<bool> PortableReactorChange;
+
+
+            internal static void BindConfigOptions(ConfigFile config)
+            {
+                PortableReactorChange = config.BindOption(
+                    _categoryName,
+                    "Portable Reactor",
+                    "Makes portable reactor give 100 armor instead of invulnerability while active.",
+                    true,
+                    Extensions.ConfigFlags.RestartRequired
+                );
+            }
+        }
+
 
         internal static void BindConfigOptions(ConfigFile config)
         {
-            ArmedBackpack = config.BindOption(
-                _categoryName,
-                "Armed Backpack",
-                "Replaces the missile projectile with a missile orb, similar to the ones plasma shrimp uses.",
-                true
-            );
-            ErraticGadget = config.BindOption(
-                _categoryName,
-                "Erratic Gadget",
-                "2 Different edits:\n\nDamageMultAndOnHitProc: Doubled lightning damage and chance to do chain lightning on hit. Stacks increase chance and targets hit.\n\nOnlyDamageMult: 3x lightning damage, stacks add to the damage multiplier.\n\nAnd of course a None option for if you don't want either.",
-                ErraticGadgetEditType.DamageMultAndOnHitProc,
-                Extensions.ConfigFlags.RestartRequired
-            );
-            PortableReactor = config.BindOption(
-                _categoryName,
-                "Portable Reactor",
-                "Makes portable reactor give 100 armor instead of invulnerability while active.",
-                true,
-                Extensions.ConfigFlags.RestartRequired
-            );
+            ErraticGadgetItem.BindConfigOptions(config);
+            PortableReactor.BindConfigOptions(config);
         }
     }
 
@@ -447,6 +512,12 @@ public static class ConfigOptions
 
     internal static void BindAllConfigOptions(ConfigFile config)
     {
+        DebugLogging = config.BindOption(
+            "General",
+            "Enable any extra debug logging",
+            "",
+            false
+        );
         Chirr.BindConfigOptions(config);
         // later
         //Knight.BindConfigOptions(config);

@@ -10,6 +10,25 @@ namespace StarstormSquared.Changes.Items.Shards;
 internal static class ShardIcons
 {
     [SystemInitializer(dependencies: typeof(ItemCatalog))]
+    private static void OnItemCatalogLoaded()
+    {
+        if (ModAssets.Loaded)
+        {
+            ChangeIcons();
+        }
+        else
+        {
+            ModAssets.OnModAssetsLoaded += ModAssets_OnModAssetsLoaded;
+        }
+    }
+    private static void ModAssets_OnModAssetsLoaded()
+    {
+        ChangeIcons();
+    }
+
+
+
+
     private static void ChangeIcons()
     {
         if (!SS2Config.enableBeta.value)
@@ -18,14 +37,14 @@ internal static class ShardIcons
         }
 
 
-        Sprite shardScavIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardScav");
-        Sprite shardGoldIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardGold");
-        Sprite shardVoidIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardVoid");
-        Sprite shardIceIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardIce");
-        Sprite shardFireIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardFire");
-        Sprite shardStormIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardStorm");
-        Sprite shardEarthIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardEarth");
-        Sprite shardLightningIcon = MyAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardLightning");
+        Sprite shardScavIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardScav");
+        Sprite shardGoldIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardGold");
+        Sprite shardVoidIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardVoid");
+        Sprite shardIceIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardIce");
+        Sprite shardFireIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardFire");
+        Sprite shardStormIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardStorm");
+        Sprite shardEarthIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardEarth");
+        Sprite shardLightningIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardLightning");
 
 
         SS2Content.Items.ShardScav.pickupIconSprite = shardScavIcon;

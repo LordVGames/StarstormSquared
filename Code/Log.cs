@@ -13,9 +13,10 @@ internal static class Log
 
     internal static void Debug(object data)
     {
-#if DEBUG
-        _logSource.LogDebug(data);
-#endif
+        if (ConfigOptions.DebugLogging.Value)
+        {
+            _logSource.LogDebug(data);
+        }
     }
     internal static void Error(object data) => _logSource.LogError(data);
     internal static void Fatal(object data) => _logSource.LogFatal(data);

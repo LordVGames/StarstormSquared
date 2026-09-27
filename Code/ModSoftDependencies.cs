@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
 using RoR2;
-
 namespace StarstormSquared;
+
 
 internal static class ModSoftDependencies
 {
@@ -13,15 +13,16 @@ internal static class ModSoftDependencies
         {
             get
             {
-                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(LordsItemEdits.Plugin.Id);
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(ReheatedItems.Plugin.Id);
                 return (bool)_enabled;
             }
         }
 
+
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         internal static float GetEditedICBMDamageMult(CharacterBody victimBody)
         {
-            return LordsItemEdits.ItemEdits.PocketICBMEdit.PocketICBM.GetICBMDamageMultForCharacterBody(victimBody);
+            return ReheatedItems.ItemChanges.PocketICBMMissilesToDamage.PocketICBM.GetICBMDamageMultForCharacterBody(victimBody);
         }
     }
 }

@@ -11,13 +11,13 @@ The majority of the changes here can be toggled on/off. Many of the changes that
 <details>
 
 <summary>Item Changes (click to open dropdown)</summary>
-  
+
 | Item  | New Description |
 | :-------------: | ------------- |
-| **Armed Backpack** <br> <img width="256" height="128" alt="texIconArmedBackpack" src="https://github.com/user-attachments/assets/bb458dc0-64c0-49b3-8fe8-0243db64e1e1" /> | **NO IN-GAME DESCRIPTION CHANGE** <br><br> I've made the missiles work more like plasma shrimp, where they have a much shorter time to fly to the targeted enemy and are much less of a burden on performance compared to normal missiles. Won't help as much on this compared to this change on ATG, but it could still help in some scenarios.
 | **Erratic Gadget** <br> *Change 1* <br> <img width="256" height="128" alt="texIconPickupErraticGadget" src="https://github.com/user-attachments/assets/c237f79c-a223-46a1-82ee-33103ae6bb6d" /> | <img width="587" height="73" alt="image" src="https://github.com/user-attachments/assets/1e0b8170-c849-4853-b5d1-5a3f74edc095" /> <br><br> This doubles lighting damage instead of doubling lightning procs to help performance some. Also, void lightning (a.k.a polylute) was never affected by erratic gadget, so I've added it to the description so it's known.
 | **Erratic Gadget** <br> *Change 2* <br> <img width="256" height="128" alt="texIconPickupErraticGadget" src="https://github.com/user-attachments/assets/c237f79c-a223-46a1-82ee-33103ae6bb6d" /> | <img width="590" height="59" alt="Risk_of_Rain_2_VLG9tdx8G6" src="https://github.com/user-attachments/assets/dacc95d4-d89d-4855-b200-809b0d92d636" /> <br><br> This is for when you also don't want the special on-hit procs from erratic gadget too, now being just a big lightning damage multiplier similar to Pocket I.C.B.M from another mod. Will help performance even more.
-| **Portable Reactor** <br> <br> <img width="256" height="128" alt="texIconPortableReactor" src="https://github.com/user-attachments/assets/55845c8a-f374-441e-ab12-d272f552c364" /> | <img width="604" height="57" alt="image" src="https://github.com/user-attachments/assets/2e53d4b0-ae5f-4fb2-95f7-7be89d7e0345" /> <br><br> I don't like how portable reactor is just a free win pass while active, and especially when it's stacked. I've changed the invulnerability to +100 armor, making it more of a constant oddly shaped opal effect while active so while you're still more tanky, the start of a stage isn't completely free. The speed gain can stay though.
+| **Erratic Gadget** <br> *BOTH Changes* <br> <img width="256" height="128" alt="texIconPickupErraticGadget" src="https://github.com/user-attachments/assets/c237f79c-a223-46a1-82ee-33103ae6bb6d" /> | There's a config option to allow void lightning (aka polylute) to be affected anyways
+| **Portable Reactor** <br> <br> <img width="256" height="128" alt="texIconPortableReactor" src="https://github.com/user-attachments/assets/55845c8a-f374-441e-ab12-d272f552c364" /> | <img width="604" height="57" alt="image" src="https://github.com/user-attachments/assets/2e53d4b0-ae5f-4fb2-95f7-7be89d7e0345" /> <br><br> I don't like how portable reactor is just a free win pass while active, and especially when it's stacked. I've changed the invulnerability to +100 armor, making it more of a constant oddly shaped opal effect while active so while you're still more tanky, the start of a stage isn't completely free.
 
 
 </details>
@@ -86,6 +86,8 @@ The majority of the changes here can be toggled on/off. Many of the changes that
 - - Requires you to have Alloyed Collective on
 - Added option to make all enemies able to become ethereal and/or ultra, even when they normally can't be an elite
 - - Off by default
+- Added options to let you configure how enemy levels are added with each ethereal
+- Fixed the bonus levels (the green text) from ethereals showing up twice
 
 ### Ultra elites
 
@@ -104,12 +106,12 @@ The majority of the changes here can be toggled on/off. Many of the changes that
 - Elite event objective has new text
 - Added new icons for super elites
 - - Credit to Gangrene for these!
-- Fixed super elites not having their proper super elite affix
-- Fixed super elites in multiplayer dropping blank shard-tier items that can't be picked up
 
 ### Other
 
 - The lunar gambler has text for its name and interaction prompts.
+- Lunar gambler is moved to between newt and the stage seers
+- - So now it's away from the reroller and any biggerbazaar chests
 - Jellyfish and acid larva cannot become any lategame elite (those being empyrean, ethereal, and ultra)
 - Adds back an unused yet working equipment from Alloyed Collective
 - - SS1 added back or re-implemented unused stuff so doing this fits this mod too imo

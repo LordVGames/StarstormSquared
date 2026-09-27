@@ -24,53 +24,72 @@ internal static class AllowAndDisallowCertainEnemiesLategame
     private static void CustomEliteDirector_ModifySpawn(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
+        ILLabel continueCodeLabel = w.DefineLabel();
+        ILLabel exitCodeLabel = w.DefineLabel();
+        int eliteRulesBoolResultLdlocNumber = 0;
+        int tempMatchingLocNumber = 0;
+        int stackableAffixLdlocNumber = 0;
 
 
-        ILLabel continueCodeLocation = null;
-        Instruction startOfSkip = null!;
-        Instruction endOfSkip = null!;
         w.MatchRelaxed(
-            x => x.MatchLdarg(2) && w.SetInstructionTo(ref startOfSkip, x),
-            x => x.MatchLdfld(out _),
-            x => x.MatchLdfld(out _),
             x => x.MatchLdfld<SpawnCard>("eliteRules"),
-            x => x.MatchBrfalse(out continueCodeLocation),
-            x => x.MatchRet() && w.SetInstructionTo(ref endOfSkip, x) && w.SetCurrentTo(x)
-        ).ThrowIfFailure();
-        // removing intiial elite rules check because i want more enemies to be ethereal/ultra including lunar enemies
-        if (ConfigOptions.Elites.AllLateGameElites.RemoveEtherealAndUltraRestriction.Value)
-        {
-            w.InsertBranchOver(startOfSkip, endOfSkip);
-        }
+            x => x.MatchLdcI4(0),
+            x => x.MatchCgtUn(),
+            x => x.MatchStloc(out eliteRulesBoolResultLdlocNumber) && w.SetCurrentTo(x)
+        ).ThrowIfFailure()
+        .InsertBeforeCurrent(
+            w.CreateDelegateCall((bool oldBool) =>
+            {
+                // always allowing if enabled
+                if (ConfigOptions.Elites.AllLateGameElites.RemoveEtherealAndUltraRestriction.Value)
+                {
+                    return false;
+                }
+                return oldBool;
+            })
+        );
+
+
         // also preventing jellyfish and larva from becoming lategame elites here because they do nothing 99% of the time
-        w.InsertAfterCurrent(
+        w.MatchRelaxed(
+            x => x.MatchLdloc(eliteRulesBoolResultLdlocNumber),
+            x => x.MatchBrfalse(out continueCodeLabel),
+            x => x.MatchBr(out exitCodeLabel) && w.SetCurrentTo(x)
+        ).ThrowIfFailure()
+        .InsertAfterCurrent(
             w.Create(OpCodes.Ldloc_1),
             w.CreateDelegateCall((CharacterBody body) =>
             {
                 if (
+                    body != null
+                    && ConfigOptions.Elites.AllLateGameElites.DisallowSelfDamagingEnemies.Value
+                    &&
                     (
-                        body == RoR2Content.BodyPrefabs.JellyfishBody
-                        || body == DLC1Content.BodyPrefabs.AcidLarvaBody
+                        body.bodyIndex == RoR2Content.BodyPrefabs.JellyfishBody.bodyIndex
+                        || body.bodyIndex == DLC1Content.BodyPrefabs.AcidLarvaBody.bodyIndex
                     )
-                    && ConfigOptions.Elites.AllLateGameElites.DisallowSelfDamagingEnemies.Value)
+                )
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }),
-            w.Create(OpCodes.Brtrue, continueCodeLocation),
-            w.Create(OpCodes.Ret)
+            w.Create(OpCodes.Brfalse, continueCodeLabel),
+            w.Create(OpCodes.Br, exitCodeLabel)
         );
 
 
+        // re-adding elite rules but only for empyreans
         ILLabel goToNextAffix = null;
         w.MatchRelaxed(
-            x => x.MatchLdloc(8),
+            x => x.MatchLdloc(out stackableAffixLdlocNumber),
             x => x.MatchCallOrCallvirt<StackableAffix>("IsAvailable"),
+            x => x.MatchStloc(out tempMatchingLocNumber),
+            x => x.MatchLdloc(tempMatchingLocNumber),
             x => x.MatchBrfalse(out goToNextAffix) && w.SetCurrentTo(x)
         ).ThrowIfFailure()
         .InsertAfterCurrent(
-            w.Create(OpCodes.Ldloc, 8),
+            w.Create(OpCodes.Ldloc, stackableAffixLdlocNumber),
             w.Create(OpCodes.Ldarg_2),
             w.CreateDelegateCall((StackableAffix stackableAffix, SpawnCard.SpawnResult spawnResult) =>
             {

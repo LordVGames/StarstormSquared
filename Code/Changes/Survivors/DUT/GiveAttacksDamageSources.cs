@@ -1,4 +1,5 @@
-﻿using Mono.Cecil.Cil;
+﻿using MiscFixes.Modules;
+using Mono.Cecil.Cil;
 using MonoDetour;
 using MonoDetour.Cil;
 using MonoDetour.HookGen;
@@ -53,13 +54,15 @@ internal static class GiveAttacksDamageSources
     private static void AddSiphonSelfDamageSource(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
+        Instruction loadDamageInfoInstruction = null!;
 
 
         w.MatchRelaxed(
-            x => x.MatchStfld<DamageInfo>("damageType") && w.SetCurrentTo(x)
+            x => x.MatchStfld<DamageInfo>("damageType") && w.SetCurrentTo(x),
+            x => x.MatchAny(out loadDamageInfoInstruction)
         ).ThrowIfFailure()
         .InsertAfterCurrent(
-            w.Create(OpCodes.Ldloc_0),
+            loadDamageInfoInstruction,
             w.CreateDelegateCall((DamageInfo damageInfo) =>
             {
                 damageInfo.damageType.damageSource = DamageSource.Primary;

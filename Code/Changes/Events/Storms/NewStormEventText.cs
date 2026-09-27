@@ -35,8 +35,9 @@ internal static class NewStormEventText
     {
         ILWeaver w = new(info);
 
+
         w.MatchRelaxed(
-            x => x.MatchLdloc(1),
+            x => x.MatchLdloc(out _),
             x => x.MatchStloc(2) && w.SetCurrentTo(x)
         ).ThrowIfFailure()
         .InsertAfterCurrent(

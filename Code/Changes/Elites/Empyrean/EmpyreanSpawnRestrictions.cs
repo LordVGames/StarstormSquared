@@ -33,8 +33,7 @@ internal static class EmpyreanSpawnRestrictions
         }
         else if (!ConfigOptions.Elites.Empyrean.AllowEmpyreansInJudgement.Value)
         {
-            string sceneName = SceneManager.GetActiveScene().name;
-            returnValue = Run.instance.stageClearCount > 7 && sceneName != "enemiesreturns_outoftime";
+            returnValue = Run.instance.stageClearCount > 7 && Stage.instance.sceneDef.cachedName != "enemiesreturns_outoftime";
         }
         else
         {

@@ -81,15 +81,13 @@ internal static class RestoreShardSpawns
     }
 
 
-    // TODO they removed the item entirely from the current build. idk how to add items yet
-    // i may come back for this unless they re-add it before i do
-    /*[MonoDetourTargets(typeof(EntityStates.Events.Storm))]
+    [MonoDetourTargets(typeof(EntityStates.Events.Storm))]
     internal static class RestoreStormShardDrop
     {
         [MonoDetourHookInitialize]
         internal static void Setup()
         {
-            if (!ConfigOptions.RestoreStormShardDrops.Value || !Storm.ReworkedStorm)
+            if (!ConfigOptions.Shards.RestoreStormShardDrops.Value || !Storm.ReworkedStorm)
             {
                 return;
             }
@@ -139,11 +137,11 @@ internal static class RestoreShardSpawns
                 int i = 0;
                 while (i < playerCount)
                 {
-                    PickupDropletController.CreatePickupDroplet(drop, bossGroup.dropPosition.position, vector);
+                    PickupDropletController.CreatePickupDroplet(new UniquePickup { pickupIndex = drop }, bossGroup.dropPosition.position, vector, false);
                     i++;
                     vector = rotation * vector;
                 }
             }
         }
-    }*/
+    }
 }

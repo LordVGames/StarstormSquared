@@ -20,7 +20,7 @@ internal static class PortableReactor
     [MonoDetourHookInitialize]
     private static void Setup()
     {
-        if (!ConfigOptions.ItemChanges.PortableReactor.Value)
+        if (!ConfigOptions.ItemChanges.PortableReactor.PortableReactorChange.Value)
         {
             return;
         }
@@ -54,7 +54,7 @@ internal static class PortableReactor
     [SystemInitializer(dependencies: typeof(ItemCatalog))]
     private static void ChangeTokens()
     {
-        if (!ConfigOptions.ItemChanges.PortableReactor.Value || SS2Content.Items.PortableReactor == null)
+        if (!ConfigOptions.ItemChanges.PortableReactor.PortableReactorChange.Value || SS2Content.Items.PortableReactor == null)
         {
             return;
         }

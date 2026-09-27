@@ -32,21 +32,22 @@ internal static class NewSuperEliteSpawnEventText
     private static void ChangeSuperEliteSpawnText(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
+        int finalEventTextRequestLdlocNumber = 0;
+
 
         w.MatchRelaxed(
-            x => x.MatchLdloc(2),
-            x => x.MatchStloc(1) && w.SetCurrentTo(x)
+            x => x.MatchStfld<GameplayEventTextController.EventTextRequest>("textDuration"),
+            x => x.MatchLdloc(out _),
+            x => x.MatchStloc(out finalEventTextRequestLdlocNumber) && w.SetCurrentTo(x)
         ).ThrowIfFailure()
         .InsertAfterCurrent(
-            w.Create(OpCodes.Ldloc_1),
-            w.Create(OpCodes.Stloc_1)
-        )
-        .InsertBeforeCurrent(
+            w.Create(OpCodes.Ldloc, finalEventTextRequestLdlocNumber),
             w.CreateDelegateCall((EventTextRequest eventTextRequest) =>
             {
                 eventTextRequest.eventToken = "SS22_SUPER_ELITE_SPAWN";
                 return eventTextRequest;
-            })
+            }),
+            w.Create(OpCodes.Stloc, finalEventTextRequestLdlocNumber)
         );
     }
 }

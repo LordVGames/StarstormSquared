@@ -9,61 +9,81 @@ using UnityEngine;
 namespace StarstormSquared.Changes.Events.EliteEvents;
 
 
+[MonoDetourTargets]
 internal static class GiveSuperElitesNewIcons
 {
-    private static bool loadedAssets = false;
-    private static Sprite blazingSuperEliteSprite;
-    private static Sprite glacialSuperEliteSprite;
-    private static Sprite mendingSuperEliteSprite;
-    private static Sprite overloadingSuperEliteSprite;
+    private static bool _buffCatalogLoaded = false;
+    private static bool _equipmentCatalogLoaded = false;
+    private static Sprite _blazingSuperEliteSprite;
+    private static Sprite _glacialSuperEliteSprite;
+    private static Sprite _mendingSuperEliteSprite;
+    private static Sprite _overloadingSuperEliteSprite;
 
 
-    private static void LoadAssets()
+
+
+    [MonoDetourHookInitialize]
+    private static void Setup()
     {
-        if (loadedAssets)
+        ModAssets.OnModAssetsLoaded += LoadBuffSprites;
+    }
+    private static void LoadBuffSprites()
+    {
+        _blazingSuperEliteSprite = ModAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteBlazing");
+        _glacialSuperEliteSprite = ModAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteGlacial");
+        _mendingSuperEliteSprite = ModAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteMending");
+        _overloadingSuperEliteSprite = ModAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteOverloading");
+        if (_buffCatalogLoaded)
         {
-            return;
+            AddBuffIcons();
         }
-        // ffufdjfudf
-        if (MyAssets.SuperEliteIcons.AssetBundle == null)
+        if (_equipmentCatalogLoaded)
         {
-            MyAssets.Init();
+            AddEquipmentIcons();
         }
-
-
-        blazingSuperEliteSprite = MyAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteBlazing");
-        glacialSuperEliteSprite = MyAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteGlacial");
-        mendingSuperEliteSprite = MyAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteMending");
-        overloadingSuperEliteSprite = MyAssets.SuperEliteIcons.AssetBundle.LoadAsset<Sprite>("SuperEliteOverloading");
-        loadedAssets = true;
     }
 
 
+
+
     [SystemInitializer(dependencies: typeof(BuffCatalog))]
+    private static void OnBuffCatalogLoaded()
+    {
+        _buffCatalogLoaded = true;
+        if (ModAssets.Loaded)
+        {
+            AddBuffIcons();
+        }
+    }
     private static void AddBuffIcons()
     {
         if (!SS2Config.enableBeta.value)
         {
             return;
         }
-        LoadAssets();
-        // stupidddddddddd
-        if (blazingSuperEliteSprite == null)
-        {
-            LoadAssets();
-        }
 
 
-        SS2Content.Buffs.BuffAffixSuperFire.iconSprite = blazingSuperEliteSprite;
+        SS2Content.Buffs.BuffAffixSuperFire.iconSprite = _blazingSuperEliteSprite;
         // why is only super fire solid red??? what
         SS2Content.Buffs.BuffAffixSuperFire.buffColor = SS2Content.Buffs.BuffAffixSuperIce.buffColor;
-        SS2Content.Buffs.BuffAffixSuperIce.iconSprite = glacialSuperEliteSprite;
-        SS2Content.Buffs.BuffAffixSuperEarth.iconSprite = mendingSuperEliteSprite;
-        SS2Content.Buffs.BuffAffixSuperLightning.iconSprite = overloadingSuperEliteSprite;
+        SS2Content.Buffs.BuffAffixSuperIce.iconSprite = _glacialSuperEliteSprite;
+        SS2Content.Buffs.BuffAffixSuperEarth.iconSprite = _mendingSuperEliteSprite;
+        SS2Content.Buffs.BuffAffixSuperLightning.iconSprite = _overloadingSuperEliteSprite;
     }
-    
-    
+
+
+
+
+
     [SystemInitializer(dependencies: typeof(EquipmentCatalog))]
+    private static void OnEquipmentCatalogLoaded()
+    {
+        _equipmentCatalogLoaded = true;
+        if (ModAssets.Loaded)
+        {
+            AddEquipmentIcons();
+        }
+    }
     private static void AddEquipmentIcons()
     {
         if (!SS2Config.enableBeta.value)
@@ -74,9 +94,9 @@ internal static class GiveSuperElitesNewIcons
 
 
         // have to load the equipments this way bc the SS2Content versions are null at this point?????
-        LoadedAssets.superFireEquipmentDef.pickupIconSprite = blazingSuperEliteSprite;
-        LoadedAssets.superIceEquipmentDef.pickupIconSprite = glacialSuperEliteSprite;
-        LoadedAssets.superEarthEquipmentDef.pickupIconSprite = mendingSuperEliteSprite;
-        LoadedAssets.superLightningEquipmentDef.pickupIconSprite = overloadingSuperEliteSprite;
+        LoadedAssets.superFireEquipmentDef.pickupIconSprite = _blazingSuperEliteSprite;
+        LoadedAssets.superIceEquipmentDef.pickupIconSprite = _glacialSuperEliteSprite;
+        LoadedAssets.superEarthEquipmentDef.pickupIconSprite = _mendingSuperEliteSprite;
+        LoadedAssets.superLightningEquipmentDef.pickupIconSprite = _overloadingSuperEliteSprite;
     }
 }

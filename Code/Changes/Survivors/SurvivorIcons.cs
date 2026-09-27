@@ -9,7 +9,24 @@ namespace StarstormSquared.Changes.Survivors;
 
 internal static class SurvivorIcons
 {
-    internal static bool SetIcons = false;
+    [SystemInitializer(dependencies: typeof(BodyCatalog))]
+    private static void OnBodyCatalogLoaded()
+    {
+        if (ModAssets.Loaded)
+        {
+            ChangeSurvivorIcons();
+        }
+        else
+        {
+            ModAssets.OnModAssetsLoaded += ModAssets_OnModAssetsLoaded;
+        }
+    }
+    private static void ModAssets_OnModAssetsLoaded()
+    {
+        ChangeSurvivorIcons();
+    }
+
+
 
 
     internal static void ChangeSurvivorIcons()
@@ -18,38 +35,33 @@ internal static class SurvivorIcons
         {
             return;
         }
-        if (!MyAssets.Initialized || MyAssets.SurvivorIcons.AssetBundle == null)
+        if (!ModAssets.Loaded)
         {
-            Log.Warning("Assets are somehow not initialized yet when trying to apply new survivor icons. Trying to initialize again...");
-            MyAssets.Init();
-            ChangeSurvivorIcons();
+            ModAssets.OnModAssetsLoaded += ModAssets_OnModAssetsLoaded;
             return;
         }
 
 
-        if (SS2Content.Survivors.survivorKnight == null || SS2Content.Survivors.survivorKnight.bodyPrefab == null || !SS2Content.Survivors.survivorKnight.bodyPrefab.TryGetComponent<CharacterBody>(out CharacterBody knightCharacterBody) || knightCharacterBody == null)
+        GameObject knightGameObject = BodyCatalog.FindBodyPrefab("KnightBody");
+        if (knightGameObject == null || !knightGameObject.TryGetComponent<CharacterBody>(out var knightBody))
         {
-            Log.Warning("KNIGHT SURVIVOR COULD NOT BE FOUND TO GIVE NEW ICON TO");
+            Log.Warning("Knight could not be found to give a new portait icon to!");
         }
         else
         {
-            knightCharacterBody.portraitIcon = MyAssets.SurvivorIcons.AssetBundle.LoadAsset<Texture>("texIconKnight");
+            knightBody.portraitIcon = ModAssets.SurvivorIcons.AssetBundle.LoadAsset<Texture>("texIconKnight");
         }
 
 
 
-        // cyborg doesn't have a survivordef in ss2content yet
-        SurvivorDef cyborgSurvivorDef = SurvivorCatalog.FindSurvivorDef("survivorCyborg2");
-        if (cyborgSurvivorDef == null || cyborgSurvivorDef.bodyPrefab == null || !cyborgSurvivorDef.bodyPrefab.TryGetComponent<CharacterBody>(out CharacterBody cyborgCharacterBody) || cyborgCharacterBody == null)
+        GameObject cyborgGameObject = BodyCatalog.FindBodyPrefab("Cyborg2Body");
+        if (cyborgGameObject == null || !cyborgGameObject.TryGetComponent<CharacterBody>(out var cyborgBody))
         {
-            Log.Warning("CYBORG SURVIVOR COULD NOT BE FOUND TO GIVE NEW ICON TO");
+            Log.Warning("Cyborg could not be found to give a new portait icon to!");
         }
         else
         {
-            cyborgCharacterBody.portraitIcon = MyAssets.SurvivorIcons.AssetBundle.LoadAsset<Texture>("texIconCyborg");
+            cyborgBody.portraitIcon = ModAssets.SurvivorIcons.AssetBundle.LoadAsset<Texture>("texIconCyborg");
         }
-
-
-        SetIcons = true;
     }
 }

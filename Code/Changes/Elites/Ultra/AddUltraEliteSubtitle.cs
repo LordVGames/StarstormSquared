@@ -19,7 +19,6 @@ internal static class AddUltraEliteSubtitle
     [MonoDetourHookInitialize]
     internal static void Setup()
     {
-        // why would you want to keep the subtitle as "horde of many"
         if (!SS2Config.enableBeta.value)
         {
             return;
@@ -28,6 +27,7 @@ internal static class AddUltraEliteSubtitle
 
         Mdh.SS2.Items.AffixUltra.BodyBehavior.Start.Postfix(AddSS1Subtitle);
     }
+
 
     // can't really store the subtitle without messing with FixedConditionalWeakTables but i don't think it matters that much
     private static void AddSS1Subtitle(AffixUltra.BodyBehavior self)

@@ -1,3 +1,17 @@
+# 1.8.0
+
+- Removed some fixes for things now fixed in SS2
+- Fixed some changes that broke from SS2 updating
+- Removed Armed Backpack change as it's gotten a special missile now
+- Fixed captain's primal birthright hacking prevention being skipped if robomando isn't installed
+- Hopefully fixed jellyfish and larva not being prevented from spawning as late game elites (if the config option for that is enabled of course)
+- Added some config options to let you configure how extra levels for enemies are added by ethereal difficulties
+- - Default options are set to do what SS2 normally does
+- Added an icon for the mod in risk of options
+- (Basically) Fixed new bonus levels text from ethereals showing up twice
+- Multiplied damage from the erratic gadget changes now also affect proc coefficient
+- Moved the lunar gambler to a different spot in the bazaar away from the reroller and bigger bazaar stuff
+
 # 1.7.0
 
 - Removed a few fixes added to SS2 itself

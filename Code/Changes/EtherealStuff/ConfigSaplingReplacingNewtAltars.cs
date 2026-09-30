@@ -21,6 +21,7 @@ internal static class ConfigSaplingReplacingNewtAltars
         Mdh.SS2.EtherealBehavior.SpawnShrine.Prefix(ChangeBasedOnConfig);
     }
 
+
     private static void ChangeBasedOnConfig(EtherealBehavior self)
     {
         EtherealBehavior.alwaysReplaceNewts = !ConfigOptions.Ethereal.SpawnSaplingInSpecialSpots.Value;

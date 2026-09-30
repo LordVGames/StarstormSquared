@@ -16,6 +16,7 @@ internal static class ChangeEliteEventObjectiveText
         Mdh.SS2.EliteEventMissionController.EliteObjectiveTracker.GenerateString.ControlFlowPrefix(ReturnNewString);
     }
 
+
     private static ReturnFlow ReturnNewString(EliteEventMissionController.EliteObjectiveTracker self, ref string returnValue)
     {
         EliteEventMissionController mission = (EliteEventMissionController)self.sourceDescriptor.source;

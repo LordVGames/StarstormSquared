@@ -33,14 +33,19 @@ internal static class CancelingDoesntAddCooldown
 
         // going to line:
         // base.skillLocator.primary.rechargeStopwatch *= 0.25f;
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchLdarg(0),
             x => x.MatchCallOrCallvirt<EntityState>("get_skillLocator"),
             x => x.MatchLdfld<SkillLocator>("primary"),
             x => x.MatchDup(),
             x => x.MatchCallOrCallvirt<GenericSkill>("get_rechargeStopwatch"),
             x => x.MatchLdcR4(0.25f) && w.SetCurrentTo(x)
-        ).ThrowIfFailure()
-        .ReplaceCurrentOperand(0.01f);
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Canceling the dupe drone duping doesn't incur the full cooldown", result.FailureMessage);
+            return;
+        }
+        w.ReplaceCurrentOperand(0.01f);
     }
 }

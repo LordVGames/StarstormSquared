@@ -29,4 +29,10 @@ internal static class ILHelpers
             }
         }
     }
+
+
+    internal static void LogCantHookMessage(string hookFunctionality, string failureMessage)
+    {
+        Log.Error($"Couldn't setup hook for \"{hookFunctionality}\"!\nReason:\n{failureMessage}");
+    }
 }

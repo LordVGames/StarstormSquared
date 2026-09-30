@@ -31,7 +31,13 @@ internal static class EmpyreanSpawnRestrictions
         {
             returnValue = false;
         }
-        else if (!ConfigOptions.Elites.Empyrean.AllowEmpyreansInJudgement.Value)
+        else if (
+            // idk which of these were null once so fuck it just null check all of it
+            !ConfigOptions.Elites.Empyrean.AllowEmpyreansInJudgement.Value
+            && Run.instance != null
+            && Stage.instance != null
+            && Stage.instance.sceneDef != null
+        )
         {
             returnValue = Run.instance.stageClearCount > 7 && Stage.instance.sceneDef.cachedName != "enemiesreturns_outoftime";
         }

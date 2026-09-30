@@ -27,10 +27,12 @@ internal static class RemoveEmpyreanShardDrop
         Mdh.SS2.Components.Empyrean.MakeElite.ILHook(SkipEmpyreanShardDrop);
     }
 
+
     private static void SkipEmpyreanShardDrop(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
         ILLabel skipShardDrop = w.DefineLabel();
+
 
         w.MatchRelaxed(
             x => x.MatchLdarg(1) && w.SetCurrentTo(x),

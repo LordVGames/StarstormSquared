@@ -32,16 +32,22 @@ internal static class GiveAttacksDamageSources
 
 
 
+
     private static void AddSiphonEnemiesDamageSource(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchCallOrCallvirt(out _),
             x => x.MatchStfld<BlastAttack>("damageType") && w.SetCurrentTo(x)
-        ).ThrowIfFailure()
-        .InsertAfterCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Adding a DamageSource to DU-T siphon enemies", result.FailureMessage);
+            return;
+        }
+        w.InsertAfterCurrent(
             w.Create(OpCodes.Dup),
             w.CreateDelegateCall((BlastAttack blastAttack) =>
             {
@@ -57,11 +63,16 @@ internal static class GiveAttacksDamageSources
         Instruction loadDamageInfoInstruction = null!;
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchStfld<DamageInfo>("damageType") && w.SetCurrentTo(x),
             x => x.MatchAny(out loadDamageInfoInstruction)
-        ).ThrowIfFailure()
-        .InsertAfterCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Adding a DamageSource to DU-T siphon self", result.FailureMessage);
+            return;
+        }
+        w.InsertAfterCurrent(
             loadDamageInfoInstruction,
             w.CreateDelegateCall((DamageInfo damageInfo) =>
             {
@@ -76,10 +87,15 @@ internal static class GiveAttacksDamageSources
         ILWeaver w = new(info);
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchStfld<BulletAttack>("damageType") && w.SetCurrentTo(x)
-        ).ThrowIfFailure()
-        .InsertAfterCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Adding a DamgeSource to DU-T laser shot", result.FailureMessage);
+            return;
+        }
+        w.InsertAfterCurrent(
             w.Create(OpCodes.Dup),
             w.CreateDelegateCall((BulletAttack bulletAttack) =>
             {

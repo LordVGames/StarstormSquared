@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 namespace StarstormSquared.Changes.Elites.SuperElites;
 
+
 internal static class AddSuperEliteSubtitles
 {
     [MonoDetourTargets(typeof(AffixSuperFire.Behavior))]
@@ -27,6 +28,7 @@ internal static class AddSuperEliteSubtitles
 
             Mdh.SS2.Equipments.AffixSuperFire.Behavior.OnEnable.Postfix(AddSubtitle);
         }
+
 
         private static void AddSubtitle(AffixSuperFire.Behavior self)
         {
@@ -50,6 +52,7 @@ internal static class AddSuperEliteSubtitles
             Mdh.SS2.Equipments.AffixSuperIce.Behavior.OnEnable.Postfix(AddSubtitle);
         }
 
+
         private static void AddSubtitle(AffixSuperIce.Behavior self)
         {
             self.characterBody.subtitleNameToken = "SS2_EQUIP_AFFIXSUPERICE_SUBTITLE";
@@ -72,6 +75,7 @@ internal static class AddSuperEliteSubtitles
             Mdh.SS2.Equipments.AffixSuperLightning.Behavior.OnEnable.Postfix(AddSubtitle);
         }
 
+
         private static void AddSubtitle(AffixSuperLightning.Behavior self)
         {
             self.characterBody.subtitleNameToken = "SS2_EQUIP_AFFIXSUPERLIGHTNING_SUBTITLE";
@@ -93,6 +97,7 @@ internal static class AddSuperEliteSubtitles
 
             Mdh.SS2.Equipments.AffixSuperEarth.Behavior.OnEnable.Postfix(AddSubtitle);
         }
+
 
         private static void AddSubtitle(AffixSuperEarth.Behavior self)
         {

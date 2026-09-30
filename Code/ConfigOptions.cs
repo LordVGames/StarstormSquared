@@ -232,6 +232,8 @@ public static class ConfigOptions
         public static ConfigEntry<bool> MultiplyByEtherealsCompleted;
         public static ConfigEntry<bool> AddLevelsOnFirstEthereal;
         public static ConfigEntry<bool> SquareEtherealsCompleted;
+        public static ConfigEntry<bool> TradeWithZanzanForArraignItem;
+
 
         internal static void BindConfigOptions(ConfigFile config)
         {
@@ -284,6 +286,13 @@ public static class ConfigOptions
                 "Put completed ethereals count to the power of 2?",
                 "Or in other words, if the ethereals completed count should be SQUARED!!!!!!",
                 true
+            );
+            TradeWithZanzanForArraignItem = config.BindOption(
+                _categoryName,
+                "Trade with Zanzan for enemies returns boss item",
+                "Should you do the trade with Zanzan instead of the newt for a little item to fight a certain boss from enemies returns?",
+                true,
+                Extensions.ConfigFlags.RestartRequired
             );
         }
     }

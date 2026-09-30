@@ -25,6 +25,7 @@ internal static class NewSuperEliteSpawnEventText
             return;
         }
 
+
         Mdh.SS2.EliteEventMissionController.SpawnBoss.ILHook(ChangeSuperEliteSpawnText);
     }
 
@@ -35,12 +36,17 @@ internal static class NewSuperEliteSpawnEventText
         int finalEventTextRequestLdlocNumber = 0;
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchStfld<GameplayEventTextController.EventTextRequest>("textDuration"),
             x => x.MatchLdloc(out _),
             x => x.MatchStloc(out finalEventTextRequestLdlocNumber) && w.SetCurrentTo(x)
-        ).ThrowIfFailure()
-        .InsertAfterCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Changing the super elite spawn text", result.FailureMessage);
+            return;
+        }
+        w.InsertAfterCurrent(
             w.Create(OpCodes.Ldloc, finalEventTextRequestLdlocNumber),
             w.CreateDelegateCall((EventTextRequest eventTextRequest) =>
             {

@@ -26,6 +26,7 @@ internal static class ChirrMinionNoHealingItems
         Mdh.SS2.Components.ChirrFriendController.ItemFilter.ILHook(FilterHealingItems);
     }
 
+
     private static void FilterHealingItems(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
@@ -33,13 +34,18 @@ internal static class ChirrMinionNoHealingItems
         Instruction loadItemDefInstruction = null!;
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchAny(out loadItemDefInstruction) && w.SetCurrentTo(x),
             x => x.MatchLdcI4(20),
             x => x.MatchCallvirt<ItemDef>("DoesNotContainTag"),
             x => x.MatchBrfalse(out endIfFalse)
-        ).ThrowIfFailure()
-        .InsertBeforeCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Making chirr tames not get healing items", result.FailureMessage);
+            return;
+        }
+        w.InsertBeforeCurrent(
             loadItemDefInstruction,
             w.Create(OpCodes.Ldc_I4_2), // itemtag 2 is healing
             w.Create(OpCodes.Callvirt, typeof(ItemDef).GetMethod("DoesNotContainTag")),

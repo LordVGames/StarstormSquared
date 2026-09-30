@@ -23,6 +23,7 @@ internal static class ToxicEliteToggle
         Mdh.SS2.Equipments.AffixPurple.IsAvailable.ControlFlowPrefix(ShouldWeOrNot);
     }
 
+
     private static ReturnFlow ShouldWeOrNot(AffixPurple self, ref ContentPack contentPack, ref bool returnValue)
     {
         returnValue = SS2Config.enableBeta.value && ConfigOptions.Elites.Toxic.EnableToxicElite.Value;

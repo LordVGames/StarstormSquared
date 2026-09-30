@@ -16,19 +16,25 @@ internal static class CustomEmpyreanLevelUpInterval
         Mdh.SS2.Components.Empyrean.MakeElite.ILHook(MakeLevelUpIntervalConfigurable);
     }
 
+
     private static void MakeLevelUpIntervalConfigurable(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchLdloc(1),
             x => x.MatchLdcI4(5) && w.SetCurrentTo(x),
             x => x.MatchDiv(),
             x => x.MatchConvR4(),
             x => x.MatchCall(out _),
             x => x.MatchStloc(2)
-        ).ThrowIfFailure()
-        .InsertAfterCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Making the empyrean level up interval configurable", result.FailureMessage);
+            return;
+        }
+        w.InsertAfterCurrent(
             w.CreateDelegateCall((int oldValue) =>
             {
                 return ConfigOptions.Elites.Empyrean.CustomEmpyreanLevelUpInterval.Value;

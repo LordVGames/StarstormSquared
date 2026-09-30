@@ -1,6 +1,6 @@
 {
 	"name": "StarstormSquared",
-	"version_number": "1.8.0",
+	"version_number": "1.8.1",
 	"website_url": "https://github.com/LordVGames/StarstormSquared",
 	"description": "An addon mod for Starstorm 2 that fixes, changes or rebalances parts of the mod, especially beta content.",
 	"dependencies": [

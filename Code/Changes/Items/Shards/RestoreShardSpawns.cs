@@ -19,11 +19,9 @@ namespace StarstormSquared.Changes.Items.Shards;
 
 internal static class RestoreShardSpawns
 {
-    [MonoDetourTargets(typeof(ShardGold))]
+    [MonoDetourTargets(typeof(PickupPickerController))]
     internal static class RestoreGoldShardDrop
     {
-        internal static ShardGold shardGoldInstance;
-
         [MonoDetourHookInitialize]
         internal static void Setup()
         {
@@ -32,23 +30,21 @@ internal static class RestoreShardSpawns
                 return;
             }
 
-            Mdh.SS2.Items.ShardGold.Initialize.Postfix(AddCommentedOutHook);
+
+            // doing this off of MultiOptionPickerPanel doesn't work, this does however
+            Mdh.RoR2.PickupPickerController.KillPanel.Prefix(YouWillDropGoldShards);
         }
 
-        private static void AddCommentedOutHook(ShardGold self)
-        {
-            shardGoldInstance = self;
-            // would use a monodetour version of the on hooks but then i couldn't use the existing ss2 method since monodetour hooks don't come with an orig
-            On.RoR2.HalcyoniteShrineInteractable.DropRewards += YouWillDropGoldShards;
-        }
 
-        private static void YouWillDropGoldShards(On.RoR2.HalcyoniteShrineInteractable.orig_DropRewards orig, HalcyoniteShrineInteractable self)
+        private static void YouWillDropGoldShards(PickupPickerController self)
         {
-            // not calling orig(self) here is fine bc the ss2 method calls it for me
-            // i feel like this shouldn't work but it does
-            Mdh.SS2.Items.ShardGold.SpawnGoldShard.Target().Invoke(shardGoldInstance, [orig, self]);
+            if (self.gameObject.name.Equals("FragmentPotentialPickup(Clone)"))
+            {
+                self.GetComponent<PickupPickerController>()?.CreatePickup(PickupCatalog.FindPickupIndex(SS2Content.Items.ShardGold.itemIndex));
+            }
         }
     }
+
 
 
 
@@ -56,6 +52,7 @@ internal static class RestoreShardSpawns
     internal static class RestoreVoidShardDrop
     {
         internal static ShardVoid shardVoidInstance;
+
 
         [MonoDetourHookInitialize]
         internal static void Setup()
@@ -68,17 +65,21 @@ internal static class RestoreShardSpawns
             Mdh.SS2.Items.ShardVoid.Initialize.Postfix(AddCommentedOutHook);
         }
 
+
         private static void AddCommentedOutHook(ShardVoid self)
         {
             shardVoidInstance = self;
             On.EntityStates.VoidCamp.Deactivate.OnEnter += YouWillDropVoidShards;
         }
 
+
         private static void YouWillDropVoidShards(On.EntityStates.VoidCamp.Deactivate.orig_OnEnter orig, EntityStates.VoidCamp.Deactivate self)
         {
             Mdh.SS2.Items.ShardVoid.SpawnVoidShard.Target().Invoke(shardVoidInstance, [orig, self]);
         }
     }
+
+
 
 
     [MonoDetourTargets(typeof(EntityStates.Events.Storm))]
@@ -111,6 +112,8 @@ internal static class RestoreShardSpawns
 
             BossGroup.onBossGroupDefeatedServer += OnBossGroupDefeatedServer;
         }
+
+
         private static void RemoveShardDropOnCompletion(EntityStates.Events.Storm storm)
         {
             if (!NetworkServer.active)
@@ -125,6 +128,7 @@ internal static class RestoreShardSpawns
 
             BossGroup.onBossGroupDefeatedServer -= OnBossGroupDefeatedServer;
         }
+
         private static void OnBossGroupDefeatedServer(BossGroup bossGroup)
         {
             if (bossGroup == TeleporterInteraction.instance.bossGroup && Run.instance.participatingPlayerCount > 0)

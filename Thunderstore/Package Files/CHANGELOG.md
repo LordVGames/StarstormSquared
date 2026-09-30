@@ -1,3 +1,12 @@
+# 1.8.1
+
+- Fixed issue with this mod's empyrean spawn restrictions
+- Changed gold shard to drop when picking your last item from a halcyon fragment thing
+- - To support stuff that drop the halcyon fragments outside of halcyon shrines
+- Merged "JudgementItemSS2" mod into this one
+- - Arraign is from SS1 anyways
+- Made a lot of changes stop just that change from loading instead of the rest of the mod's changes
+
 # 1.8.0
 
 - Removed some fixes for things now fixed in SS2

@@ -31,7 +31,7 @@ internal static class MakePrimaryScaleWithAttackSpeed
         ILWeaver w = new(info);
 
 
-        w.MatchMultipleRelaxed(
+         ILWeaverResult result = w.MatchMultipleRelaxed(
             onMatch: (Action<ILWeaver>)(mW =>
             {
                 mW.InsertAfterCurrent(
@@ -43,6 +43,11 @@ internal static class MakePrimaryScaleWithAttackSpeed
                 );
             }),
             x => x.MatchLdsfld<EntityStates.DUT.ChargeDamage>("baseDuration") && w.SetCurrentTo(x)
-        ).ThrowIfFailure();
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Adding attack speed scaling to DU-T charge damage", result.FailureMessage);
+            return;
+        }
     }
 }

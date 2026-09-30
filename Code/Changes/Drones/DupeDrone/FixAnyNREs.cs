@@ -28,7 +28,7 @@ internal static class FixAnyNREs
         int oneBehindLoadColliderLdlocNumber = 0;
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchBr(out skipIteration),
             x => x.MatchLdloca(out oneBehindLoadColliderLdlocNumber),
             x => x.MatchCallOrCallvirt(out _),
@@ -38,8 +38,13 @@ internal static class FixAnyNREs
             x => x.MatchCallOrCallvirt<Component>("get_transform") && w.SetCurrentTo(x),
             x => x.MatchCallOrCallvirt<Transform>("get_parent"),
             x => x.MatchCallOrCallvirt<Component>("get_gameObject")
-        ).ThrowIfFailure()
-        .InsertBeforeCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Fixing NRE from dupe drones", result.FailureMessage);
+            return;
+        }
+        w.InsertBeforeCurrent(
             w.CreateDelegateCall((Collider collider) =>
             {
                 // SS2 NREs here because some item transforms apparently have (to quote wheatley) "well um...lack of parent(s)"

@@ -28,6 +28,7 @@ internal static class ChirrNoTamingTerminals
         Mdh.SS2.Components.ChirrFriendTracker.CheckBody.ControlFlowPrefix(DontLetTerminalsBeTamed);
     }
 
+
     private static ReturnFlow DontLetTerminalsBeTamed(ChirrFriendTracker self, ref CharacterBody body, ref bool returnValue)
     {
         if (body == null || body.inventory == null)

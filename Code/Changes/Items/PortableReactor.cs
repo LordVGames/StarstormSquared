@@ -29,6 +29,7 @@ internal static class PortableReactor
         Mdh.SS2.Items.PortableReactor.Behavior.OnIncomingDamageServer.ILHook(RemoveInvulnerability);
     }
 
+
     private static void AlsoGiveArmorWhenActive(SS2.Items.PortableReactor self, ref CharacterBody sender, ref RecalculateStatsAPI.StatHookEventArgs args)
     {
         if (sender.HasBuff(SS2Content.Buffs.BuffReactor))
@@ -37,19 +38,27 @@ internal static class PortableReactor
         }
     }
 
+
     private static void RemoveInvulnerability(ILManipulationInfo info)
     {
         ILWeaver w = new(info);
         Instruction startOfBadLine = null!;
         Instruction endOfBadLine = null!;
 
-        w.MatchRelaxed(
+
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchLdarg(1) && w.SetInstructionTo(ref startOfBadLine, x),
             x => x.MatchLdcI4(1),
             x => x.MatchStfld<DamageInfo>("rejected") && w.SetInstructionTo(ref endOfBadLine, x)
-        ).ThrowIfFailure()
-        .InsertBranchOver(startOfBadLine, endOfBadLine);
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Removing invincibility from portable reactor", result.FailureMessage);
+            return;
+        }
+        w.InsertBranchOver(startOfBadLine, endOfBadLine);
     }
+
 
     [SystemInitializer(dependencies: typeof(ItemCatalog))]
     private static void ChangeTokens()

@@ -29,6 +29,7 @@ internal static class UltraWardBuffTweak
         Mdh.SS2.Items.AffixUltra.RecalculateStatsAPI_GetStatCoefficients.ControlFlowPrefix(DoTweakedUltraWardEffect);
     }
 
+
     private static ReturnFlow DoTweakedUltraWardEffect(AffixUltra self, ref CharacterBody body, ref RecalculateStatsAPI.StatHookEventArgs args)
     {
         if (body.HasBuff(SS2Content.Buffs.bdUltra))
@@ -48,7 +49,6 @@ internal static class UltraWardBuffTweak
                 }
             }
         }
-
         return ReturnFlow.SkipOriginal;
     }
 }

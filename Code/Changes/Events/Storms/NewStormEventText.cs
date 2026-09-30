@@ -36,28 +36,32 @@ internal static class NewStormEventText
         ILWeaver w = new(info);
 
 
-        w.MatchRelaxed(
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchLdloc(out _),
             x => x.MatchStloc(2) && w.SetCurrentTo(x)
-        ).ThrowIfFailure()
-        .InsertAfterCurrent(
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Changing storm event levels text", result.FailureMessage);
+            return;
+        }
+        w.InsertAfterCurrent(
             w.Create(OpCodes.Ldarg_0),
             w.Create(OpCodes.Ldloc_2),
-            w.CreateCall(GetCorrectStormTextToken),
+            w.CreateDelegateCall((EntityStates.Events.Storm storm, GameplayEventTextController.EventTextRequest eventTextRequest) =>
+            {
+                eventTextRequest.eventToken = storm.stormLevel switch
+                {
+                    1 => "SS2_EVENT_THUNDERSTORM_START",
+                    2 => "SS22_STORM_LEVEL_2",
+                    3 => "SS22_STORM_LEVEL_3",
+                    4 => "SS22_STORM_LEVEL_4",
+                    _ => Language.GetStringFormatted("SS22_STORM_LEVEL_OTHER", storm.stormLevel),
+                };
+                return eventTextRequest;
+            }),
             w.Create(OpCodes.Stloc_2)
         );
-    }
-    private static GameplayEventTextController.EventTextRequest GetCorrectStormTextToken(EntityStates.Events.Storm storm, GameplayEventTextController.EventTextRequest eventTextRequest)
-    {
-        eventTextRequest.eventToken = storm.stormLevel switch
-        {
-            1 => "SS2_EVENT_THUNDERSTORM_START",
-            2 => "SS22_STORM_LEVEL_2",
-            3 => "SS22_STORM_LEVEL_3",
-            4 => "SS22_STORM_LEVEL_4",
-            _ => Language.GetStringFormatted("SS22_STORM_LEVEL_OTHER", storm.stormLevel),
-        };
-        return eventTextRequest;
     }
 
 
@@ -65,9 +69,18 @@ internal static class NewStormEventText
     {
         ILWeaver w = new(info);
 
-        w.MatchRelaxed(
+
+        ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchLdstr("ermmmm..... bye storm") && w.SetCurrentTo(x)
-        ).ThrowIfFailure()
-        .ReplaceCurrentOperand("SS2_EVENT_THUNDERSTORM_END");
+        );
+        if (!result.IsValid)
+        {
+            ILHelpers.LogCantHookMessage("Changing storm event end text", result.FailureMessage);
+            return;
+        }
+        else
+        {
+            w.ReplaceCurrentOperand("SS2_EVENT_THUNDERSTORM_END");
+        }
     }
 }

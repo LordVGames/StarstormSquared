@@ -1,12 +1,12 @@
 {
 	"name": "StarstormSquared",
-	"version_number": "1.8.1",
+	"version_number": "1.8.2",
 	"website_url": "https://github.com/LordVGames/StarstormSquared",
 	"description": "An addon mod for Starstorm 2 that fixes, changes or rebalances parts of the mod, especially beta content.",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2122",
 		"MonoDetour-MonoDetour_BepInEx_5-0.7.16",
 		"RiskofThunder-R2API_Language-1.1.0",
-		"TeamMoonstorm-Starstorm2-0.6.44"
+		"TeamMoonstorm-Starstorm2-0.6.45"
 	]
 }

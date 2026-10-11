@@ -53,9 +53,6 @@ internal static class LoadedAssets
 
     private static readonly AssetReferenceT<Sprite> _railgunnerShotIconReference = new(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_DLC1_Railgunner.texRailgunnerSkillIcons_png_texRailgunnerSkillIcons_10_);
     internal static Sprite RailgunnerShotIcon;
-
-
-
     internal static void LoadAssets()
     {
         AssetAsyncReferenceManager<ExpansionDef>.LoadAsset(_dlc1AssetReference).Completed += (handle) =>
@@ -114,39 +111,5 @@ internal static class LoadedAssets
         {
             RailgunnerShotIcon = handle.Result;
         };
-    }
-
-
-
-    internal static bool equipmentsLoaded = false;
-    internal static EquipmentIndex superFireEquipmentIndex;
-    internal static EquipmentIndex superIceEquipmentIndex;
-    internal static EquipmentIndex superEarthEquipmentIndex;
-    internal static EquipmentIndex superLightningEquipmentIndex;
-    internal static EquipmentDef superFireEquipmentDef;
-    internal static EquipmentDef superIceEquipmentDef;
-    internal static EquipmentDef superEarthEquipmentDef;
-    internal static EquipmentDef superLightningEquipmentDef;
-    internal static void LoadEquipments()
-    {
-        if (equipmentsLoaded)
-        {
-            return;
-        }
-
-
-        superFireEquipmentIndex = EquipmentCatalog.FindEquipmentIndex("AffixSuperFire");
-        superIceEquipmentIndex = EquipmentCatalog.FindEquipmentIndex("AffixSuperIce");
-        superEarthEquipmentIndex = EquipmentCatalog.FindEquipmentIndex("AffixSuperEarth");
-        superLightningEquipmentIndex = EquipmentCatalog.FindEquipmentIndex("AffixSuperLightning");
-
-
-        superFireEquipmentDef = EquipmentCatalog.GetEquipmentDef(superFireEquipmentIndex);
-        superIceEquipmentDef = EquipmentCatalog.GetEquipmentDef(superIceEquipmentIndex);
-        superEarthEquipmentDef = EquipmentCatalog.GetEquipmentDef(superEarthEquipmentIndex);
-        superLightningEquipmentDef = EquipmentCatalog.GetEquipmentDef(superLightningEquipmentIndex);
-
-
-        equipmentsLoaded = true;
     }
 }

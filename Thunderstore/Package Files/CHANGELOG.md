@@ -1,3 +1,7 @@
+# 1.8.2
+
+- Fixed for latest SS2
+
 # 1.8.1
 
 - Fixed issue with this mod's empyrean spawn restrictions

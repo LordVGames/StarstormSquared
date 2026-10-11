@@ -25,19 +25,17 @@ internal static class FixAnyNREs
     {
         ILWeaver w = new(info);
         ILLabel skipIteration = w.DefineLabel();
-        int oneBehindLoadColliderLdlocNumber = 0;
+        int colliderGameObjectLdlocNumber = 0;
 
 
         ILWeaverResult result = w.MatchRelaxed(
             x => x.MatchBr(out skipIteration),
-            x => x.MatchLdloca(out oneBehindLoadColliderLdlocNumber),
+            x => x.MatchLdloca(out _),
             x => x.MatchCallOrCallvirt(out _),
-            x => x.MatchStloc(oneBehindLoadColliderLdlocNumber + 1),
-            x => x.MatchNop(),
-            x => x.MatchLdloc(oneBehindLoadColliderLdlocNumber + 1),
             x => x.MatchCallOrCallvirt<Component>("get_transform") && w.SetCurrentTo(x),
             x => x.MatchCallOrCallvirt<Transform>("get_parent"),
-            x => x.MatchCallOrCallvirt<Component>("get_gameObject")
+            x => x.MatchCallOrCallvirt<Component>("get_gameObject"),
+            x => x.MatchStloc(out colliderGameObjectLdlocNumber)
         );
         if (!result.IsValid)
         {
@@ -45,6 +43,7 @@ internal static class FixAnyNREs
             return;
         }
         w.InsertBeforeCurrent(
+            w.Create(OpCodes.Ldloc, colliderGameObjectLdlocNumber),
             w.CreateDelegateCall((Collider collider) =>
             {
                 // SS2 NREs here because some item transforms apparently have (to quote wheatley) "well um...lack of parent(s)"
@@ -52,8 +51,7 @@ internal static class FixAnyNREs
                     || collider.transform == null
                     || collider.transform.parent == null;
             }),
-            w.Create(OpCodes.Brtrue, skipIteration),
-            w.Create(OpCodes.Ldloc, oneBehindLoadColliderLdlocNumber + 1)
+            w.Create(OpCodes.Brtrue, skipIteration)
         );
     }
 }

@@ -30,22 +30,17 @@ internal static class IgnoreTempItems
     {
         ILWeaver w = new(info);
         ILLabel skipInForLoopLabel = w.DefineLabel();
+        w.DeclareVariable(typeof(ItemIndex), out var itemIndexVariable);
         int inventoryLdlocNumber = 0;
-        int itemIndexLdlocNumber = 0;
+        int iterationLdlocNumber = 0;
 
 
         w.MatchRelaxed(
-            x => x.MatchLdloc(0),
-            x => x.MatchCallOrCallvirt<CharacterBody>("get_inventory"),
-            x => x.MatchStloc(out inventoryLdlocNumber)
-        ).ThrowIfFailure();
-
-
-        w.MatchRelaxed(
+            x => x.MatchLdloc(out inventoryLdlocNumber) && w.SetCurrentTo(x),
             x => x.MatchLdfld<Inventory>("itemAcquisitionOrder"),
-            x => x.MatchLdloc(out _), // currently is 6
+            x => x.MatchLdloc(out iterationLdlocNumber),
             x => x.MatchCallOrCallvirt(out _),
-            x => x.MatchStloc(out itemIndexLdlocNumber)
+            x => x.MatchCallOrCallvirt(out _)
         ).ThrowIfFailure();
 
 
@@ -57,11 +52,11 @@ internal static class IgnoreTempItems
         ).ThrowIfFailure()
         .InsertAfterCurrent(
             w.Create(OpCodes.Ldloc, inventoryLdlocNumber),
-            w.Create(OpCodes.Ldloc, itemIndexLdlocNumber),
-            w.CreateDelegateCall((Inventory inventory, ItemIndex currentItemIndex) =>
+            w.Create(OpCodes.Ldloc, iterationLdlocNumber),
+            w.CreateDelegateCall((Inventory inventory, int iteration) =>
             {
                 // zanzan can still do proper trades if you have any of the real version of an item alongside temp ones
-                return inventory.GetItemCountTemp(currentItemIndex) > 0 && inventory.GetItemCountPermanent(currentItemIndex) < 1;
+                return inventory.GetItemCountTemp(inventory.itemAcquisitionOrder[iteration]) > 0 && inventory.GetItemCountPermanent(inventory.itemAcquisitionOrder[iteration]) < 1;
             }),
             w.Create(OpCodes.Brtrue, skipInForLoopLabel)
         );

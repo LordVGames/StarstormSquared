@@ -111,18 +111,27 @@ internal static class ErraticGadgetItem
 
 
         // going to the 2nd "orig.Invoke(self);"
-        w.MatchRelaxed(
+        bool didFirstMatch = false;
+        w.MatchMultipleRelaxed(
+            onMatch: (Action<ILWeaver>)(mW =>
+            {
+                if (!didFirstMatch)
+                {
+                    didFirstMatch = true;
+                }
+                else
+                {
+                    mW.InsertBeforeCurrent(w.Create(OpCodes.Ldarg_2))
+                    .MarkLabelToCurrent(skipDoublingProc)
+                    .InsertBeforeCurrent(
+                        w.CreateCall(JustDealMoreDamage)
+                    );
+                }
+            }),
             x => x.MatchLdarg(1) && w.SetCurrentTo(x),
             x => x.MatchLdarg(2),
-            x => x.MatchCallvirt(out _),
-            x => x.MatchNop(),
-            x => x.MatchLdarg(2)
-        ).ThrowIfFailure()
-        .InsertBeforeCurrent(w.Create(OpCodes.Ldarg_2))
-        .MarkLabelToCurrent(skipDoublingProc)
-        .InsertBeforeCurrent(
-            w.CreateCall(JustDealMoreDamage)
-        );
+            x => x.MatchCallvirt(out _)
+        ).ThrowIfFailure();
     }
     private static void JustDealMoreDamage(LightningOrb lightningOrb)
     {

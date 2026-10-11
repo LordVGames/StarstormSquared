@@ -16,7 +16,7 @@
 	<PropertyGroup>
 		<AssemblyName>LordVGames.StarstormSquared</AssemblyName>
 		<AssemblyTitle>StarstormSquared</AssemblyTitle>
-		<Version>1.8.1</Version>
+		<Version>1.8.2</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -60,21 +60,19 @@
 
 		<PackageReference Include="Risky_Sleeps-EnemiesReturns" Version="0.7.28" Publicize="true" />
 
-		<PackageReference Include="RoR2BepInExPack" Version="1.43.0" />
+		<PackageReference Include="RoR2BepInExPack" Version="1.45.0" />
 
 		<PackageReference Include="Rune580.Mods.RiskOfRain2.RiskOfOptions" Version="2.8.6" />
 
-		<PackageReference Include="score-MiscFixes" Version="1.5.6" />
+		<PackageReference Include="score-MiscFixes" Version="1.6.1" />
 
 		<PackageReference Include="TeamMoonstorm-MoonstormSharedUtils" Version="2.5.1" Publicize="true" />
 
-		<PackageReference Include="TeamMoonstorm-Starstorm2" Version="0.6.44" Publicize="true" />
+		<PackageReference Include="TeamMoonstorm-Starstorm2" Version="0.6.45" Publicize="true" />
 
 		<PackageReference Include="The_Bozos-RobomandoMod" Version="1.0.17" Publicize="true" />
-
-		<PackageReference Include="UnityEngine.Modules" Version="2021.3.33" IncludeAssets="compile" />
-		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.1-r.0" />
-		<PackageReference Include="MMHOOK.RoR2" Version="2025.12.9" NoWarn="NU1701" />
+		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.5.0-r.1" />
+		<PackageReference Include="MMHOOK.RoR2" Version="2026.10.8" NoWarn="NU1701" />
 	</ItemGroup>
 
 	<ItemGroup>

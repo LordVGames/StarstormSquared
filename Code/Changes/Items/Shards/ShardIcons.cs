@@ -47,6 +47,7 @@ internal static class ShardIcons
         Sprite shardLightningIcon = ModAssets.ShardIcons.AssetBundle.LoadAsset<Sprite>("texIconShardLightning");
 
 
+#pragma warning disable CS0618 // Type or member is obsolete
         SS2Content.Items.ShardScav.pickupIconSprite = shardScavIcon;
         // need to do it again this way because otherwise it shows the old icon in picker menus like the trade tele
         PickupCatalog.FindPickupIndex(SS2Content.Items.ShardScav.itemIndex).pickupDef.iconSprite = shardScavIcon;
@@ -75,5 +76,6 @@ internal static class ShardIcons
             SS2Content.Items.ShardStorm.pickupIconSprite = shardStormIcon;
             PickupCatalog.FindPickupIndex(SS2Content.Items.ShardStorm.itemIndex).pickupDef.iconSprite = shardStormIcon;
         }
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 }

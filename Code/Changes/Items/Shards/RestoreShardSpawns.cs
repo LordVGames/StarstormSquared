@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoDetour;
 using MonoDetour.Cil;
 using MonoDetour.HookGen;
 using MonoMod.Cil;
-using SS2;
-using SS2.Items;
-using UnityEngine;
-using UnityEngine.Networking;
-using RoR2;
 using MonoMod.RuntimeDetour;
 using Newtonsoft.Json.Utilities;
+using RoR2;
+using SS2;
+using SS2.Items;
+using StarstormSquared.Changes.Stages.SlateMines;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 namespace StarstormSquared.Changes.Items.Shards;
 
 
@@ -22,6 +24,7 @@ internal static class RestoreShardSpawns
     [MonoDetourTargets(typeof(PickupPickerController))]
     internal static class RestoreGoldShardDrop
     {
+        private static bool stageHasHalcyonShrine = false;
         [MonoDetourHookInitialize]
         internal static void Setup()
         {
@@ -33,12 +36,27 @@ internal static class RestoreShardSpawns
 
             // doing this off of MultiOptionPickerPanel doesn't work, this does however
             Mdh.RoR2.PickupPickerController.KillPanel.Prefix(YouWillDropGoldShards);
+            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        }
+
+
+        private static void SceneManager_sceneLoaded(Scene scene, LoadSceneMode arg1)
+        {
+            stageHasHalcyonShrine = false;
+            foreach (var gameObject in scene.GetRootGameObjects())
+            {
+                if (gameObject.name.Contains("ShrineHalcyonite"))
+                {
+                    stageHasHalcyonShrine = true;
+                    return;
+                }
+            }
         }
 
 
         private static void YouWillDropGoldShards(PickupPickerController self)
         {
-            if (self.gameObject.name.Equals("FragmentPotentialPickup(Clone)"))
+            if (self.gameObject.name.Equals("FragmentPotentialPickup(Clone)") && stageHasHalcyonShrine)
             {
                 self.GetComponent<PickupPickerController>()?.CreatePickup(PickupCatalog.FindPickupIndex(SS2Content.Items.ShardGold.itemIndex));
             }
@@ -131,7 +149,12 @@ internal static class RestoreShardSpawns
 
         private static void OnBossGroupDefeatedServer(BossGroup bossGroup)
         {
-            if (bossGroup == TeleporterInteraction.instance.bossGroup && Run.instance.participatingPlayerCount > 0)
+            if (
+                bossGroup != null
+                && TeleporterInteraction.instance.bossGroup != null
+                && bossGroup == TeleporterInteraction.instance.bossGroup
+                && Run.instance.participatingPlayerCount > 0
+            )
             {
                 int playerCount = Run.instance.participatingPlayerCount;
                 float angle = 360f / (float)playerCount;

@@ -88,6 +88,7 @@ The majority of the changes here can be toggled on/off. Many of the changes that
 - - Off by default
 - Added options to let you configure how enemy levels are added with each ethereal
 - Fixed the bonus levels (the green text) from ethereals showing up twice
+- Your mithrix karma (if you have it enabled) will be maxed out after the difficulty upgrades
 
 ### Ultra elites
 

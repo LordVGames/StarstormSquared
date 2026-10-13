@@ -228,11 +228,13 @@ public static class ConfigOptions
         public static ConfigEntry<bool> SpawnSaplingInSpecialSpots;
         public static ConfigEntry<bool> StopZanzanIdleSounds;
         public static ConfigEntry<bool> AddAmbientCapLevels;
+        public static ConfigEntry<float> AmbientLevelsToAdd;
         public static ConfigEntry<float> BonusLevelsToAdd;
         public static ConfigEntry<bool> MultiplyByEtherealsCompleted;
         public static ConfigEntry<bool> AddLevelsOnFirstEthereal;
         public static ConfigEntry<bool> SquareEtherealsCompleted;
         public static ConfigEntry<bool> TradeWithZanzanForArraignItem;
+        public static ConfigEntry<bool> MaxKarmaOnEthereal;
 
 
         internal static void BindConfigOptions(ConfigFile config)
@@ -261,6 +263,14 @@ public static class ConfigOptions
                 "Should 100 levels be added to the ambient level cap each ethereal level?",
                 true
             );
+            AmbientLevelsToAdd = config.BindOptionSteppedSlider(
+                _categoryName,
+                "Ambient levels to add",
+                "You can configure the amount of ambient levels to add to the enemy level cap each ethereal level.",
+                100,
+                1,
+                0, 999
+            );
             BonusLevelsToAdd = config.BindOptionSteppedSlider(
                 _categoryName,
                 "Bonus levels to add",
@@ -272,7 +282,7 @@ public static class ConfigOptions
             MultiplyByEtherealsCompleted = config.BindOption(
                 _categoryName,
                 "Multiply bonus levels per ethereal",
-                "If their idle scav sounds are getting a lil annoying (no offense to them) then enable this to stop the sounds. Changes only take affect on stage load!",
+                "Should the bonus level amount multiply by how many ethereals have been completed?",
                 true
             );
             AddLevelsOnFirstEthereal = config.BindOption(
@@ -293,6 +303,12 @@ public static class ConfigOptions
                 "Should you do the trade with Zanzan instead of the newt for a little item to fight a certain boss from enemies returns?",
                 true,
                 Extensions.ConfigFlags.RestartRequired
+            );
+            MaxKarmaOnEthereal = config.BindOption(
+                _categoryName,
+                "Max karma on an ethereal being completed",
+                "Should the karma level (if you have karma enabled) be maxed out when the difficulty upgrades?",
+                true
             );
         }
     }

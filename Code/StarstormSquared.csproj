@@ -14,9 +14,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<AssemblyName>LordVGames.StarstormSquared</AssemblyName>
+		<AssemblyName>Lordryn.StarstormSquared</AssemblyName>
 		<AssemblyTitle>StarstormSquared</AssemblyTitle>
-		<Version>1.8.2</Version>
+		<Version>1.9.0</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">

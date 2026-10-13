@@ -64,12 +64,21 @@ internal static class ConfigureEtherealLevelScaling
         Instruction skipEnd = null!;
         w.MatchRelaxed(
             x => x.MatchLdsfld<EtherealBehavior>("defaultLevelCap") && w.SetInstructionTo(ref skipStart, x),
-            x => x.MatchLdcI4(100),
+            x => x.MatchLdcI4(100) && w.SetCurrentTo(x),
             x => x.MatchLdarg(out _),
             x => x.MatchMul(),
             x => x.MatchAdd(),
             x => x.MatchStsfld<Run>("ambientLevelCap") && w.SetInstructionTo(ref skipEnd, x)
         ).ThrowIfFailure()
-        .InsertBranchOver(skipStart, skipEnd);
+        .InsertAfterCurrent(
+            w.CreateDelegateCall((int oldValue) =>
+            {
+                return (int)ConfigOptions.Ethereal.AmbientLevelsToAdd.Value;
+            })
+        )
+        .InsertBranchOverIfFalse(skipStart, skipEnd, w.CreateDelegateCall(() =>
+        {
+            return ConfigOptions.Ethereal.AddAmbientCapLevels.Value;
+        }));
     }
 }

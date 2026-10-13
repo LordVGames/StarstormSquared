@@ -1,3 +1,12 @@
+# 1.9.0
+
+- Fixed NRE from this mod's erratic gadget changes
+- Made gold shards only drop if there's a halcyon shrine in the stage
+- Added an option to max out karma after completing an ethereal teleporter
+- - Specifically when the difficulty would change)
+- Made AddAmbientCapLevels config actually do something
+- Added option to configure how many levels are added to the ambient level cap each ethereal
+
 # 1.8.2
 
 - Fixed for latest SS2

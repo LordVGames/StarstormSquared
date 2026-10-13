@@ -135,6 +135,10 @@ internal static class ErraticGadgetItem
     }
     private static void JustDealMoreDamage(LightningOrb lightningOrb)
     {
+        if (lightningOrb.attacker == null || lightningOrb.target == null)
+        {
+            return;
+        }
         if (!AllowErraticGadgetDamageBuff(lightningOrb.attacker))
         {
             return;
@@ -161,6 +165,10 @@ internal static class ErraticGadgetItem
     }
     private static ReturnFlow VoidLightningOrb_JustMoreDamage(ErraticGadget self, ref On.RoR2.Orbs.VoidLightningOrb.orig_Begin orig, ref VoidLightningOrb voidLightningOrb)
     {
+        if (voidLightningOrb.attacker == null || voidLightningOrb.target == null)
+        {
+            return ReturnFlow.SkipOriginal;
+        }
         if (!AllowErraticGadgetDamageBuff(voidLightningOrb.attacker))
         {
             orig(voidLightningOrb);
@@ -183,6 +191,10 @@ internal static class ErraticGadgetItem
     // charged perforator
     private static ReturnFlow SimpleLightningStrikeOrb_JustMoreDamage(ErraticGadget self, ref On.RoR2.Orbs.SimpleLightningStrikeOrb.orig_OnArrival orig, ref SimpleLightningStrikeOrb simpleLightningStrikeOrb)
     {
+        if (simpleLightningStrikeOrb.attacker == null || simpleLightningStrikeOrb.target == null)
+        {
+            return ReturnFlow.SkipOriginal;
+        }
         if (!AllowErraticGadgetDamageBuff(simpleLightningStrikeOrb.attacker))
         {
             orig(simpleLightningStrikeOrb);
@@ -205,6 +217,10 @@ internal static class ErraticGadgetItem
     // royal capacitor
     private static ReturnFlow LightningStrikeOrb_JustMoreDamage(ErraticGadget self, ref On.RoR2.Orbs.LightningStrikeOrb.orig_OnArrival orig, ref LightningStrikeOrb lightningStrikeOrb)
     {
+        if (lightningStrikeOrb.attacker == null || lightningStrikeOrb.target == null)
+        {
+            return ReturnFlow.SkipOriginal;
+        }
         if (!AllowErraticGadgetDamageBuff(lightningStrikeOrb.attacker))
         {
             orig(lightningStrikeOrb);

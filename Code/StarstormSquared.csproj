@@ -16,7 +16,7 @@
 	<PropertyGroup>
 		<AssemblyName>Lordryn.StarstormSquared</AssemblyName>
 		<AssemblyTitle>StarstormSquared</AssemblyTitle>
-		<Version>1.9.0</Version>
+		<Version>1.9.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">

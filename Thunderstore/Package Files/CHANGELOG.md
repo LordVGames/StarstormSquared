@@ -1,3 +1,7 @@
+# 1.9.1
+
+- Added config option for re-implementing the G-Force Accelerator equipment
+
 # 1.9.0
 
 - Fixed NRE from this mod's erratic gadget changes

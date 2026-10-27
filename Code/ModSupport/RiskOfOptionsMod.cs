@@ -30,7 +30,17 @@ internal class RiskOfOptionsMod
     [MonoDetourHookInitialize]
     private static void SetupIconAndDescription()
     {
-        if (ModIsRunning)
+        if (!ModIsRunning)
+        {
+            return;
+        }
+
+
+        if (ModAssets.Loaded)
+        {
+            ModAssets_OnModAssetsLoaded();
+        }
+        else
         {
             ModAssets.OnModAssetsLoaded += ModAssets_OnModAssetsLoaded;
         }

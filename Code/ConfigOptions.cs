@@ -535,6 +535,25 @@ public static class ConfigOptions
     }
 
 
+    public static class RestoreUnused
+    {
+        private const string _categoryName = "Restoring Unused Stuff";
+        public static ConfigEntry<bool> GForceAccelerator;
+
+
+        internal static void BindConfigOptions(ConfigFile config)
+        {
+            GForceAccelerator = config.BindOption(
+                _categoryName,
+                "G-Force Accelerator",
+                "Bring back an unused equipment from Alloyed Collective? It still requires the DLC to be on to have it drop.",
+                true,
+                Extensions.ConfigFlags.RestartRequired
+            );
+        }
+    }
+
+
     internal static void BindAllConfigOptions(ConfigFile config)
     {
         DebugLogging = config.BindOption(
@@ -546,13 +565,14 @@ public static class ConfigOptions
         Chirr.BindConfigOptions(config);
         // later
         //Knight.BindConfigOptions(config);
-        Events.BindConfigOptions(config);
         Elites.BindConfigOptions(config);
         Ethereal.BindConfigOptions(config);
-        Shards.BindConfigOptions(config);
-        ItemChanges.BindConfigOptions(config);
-        Stages.BindConfigOptions(config);
-        NemesisInvasions.BindConfigOptions(config);
+        Events.BindConfigOptions(config);
         Interactables.BindConfigOptions(config);
+        ItemChanges.BindConfigOptions(config);
+        NemesisInvasions.BindConfigOptions(config);
+        RestoreUnused.BindConfigOptions(config);
+        Shards.BindConfigOptions(config);
+        Stages.BindConfigOptions(config);
     }
 }

@@ -217,7 +217,12 @@ internal static class ErraticGadgetItem
     // royal capacitor
     private static ReturnFlow LightningStrikeOrb_JustMoreDamage(ErraticGadget self, ref On.RoR2.Orbs.LightningStrikeOrb.orig_OnArrival orig, ref LightningStrikeOrb lightningStrikeOrb)
     {
-        if (lightningStrikeOrb.attacker == null || lightningStrikeOrb.target == null)
+        if (
+            lightningStrikeOrb.attacker == null
+            || lightningStrikeOrb.target == null
+            || lightningStrikeOrb.nextOrb == null
+            || lightningStrikeOrb.objectTarget == null
+        )
         {
             return ReturnFlow.SkipOriginal;
         }

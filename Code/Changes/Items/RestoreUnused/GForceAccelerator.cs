@@ -18,6 +18,12 @@ internal static class GForceAccelerator
     [MonoDetourHookInitialize]
     private static void Setup()
     {
+        if (!ConfigOptions.RestoreUnused.GForceAccelerator.Value)
+        {
+            return;
+        }
+
+
         Mdh.RoR2.EquipmentCatalog.Init.Prefix(BeforeInit);
     }
 
